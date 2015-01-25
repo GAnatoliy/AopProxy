@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProxyTests", "ProxyTests\ProxyTests.csproj", "{DA9483FE-566C-4738-A951-34C0141C1354}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interceptors.Tests", "Interceptors.Tests\Interceptors.Tests.csproj", "{A8A0A094-0732-49AE-9B84-E382830C1E63}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA9483FE-566C-4738-A951-34C0141C1354}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA9483FE-566C-4738-A951-34C0141C1354}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA9483FE-566C-4738-A951-34C0141C1354}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA9483FE-566C-4738-A951-34C0141C1354}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8A0A094-0732-49AE-9B84-E382830C1E63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8A0A094-0732-49AE-9B84-E382830C1E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8A0A094-0732-49AE-9B84-E382830C1E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8A0A094-0732-49AE-9B84-E382830C1E63}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
