@@ -44,6 +44,10 @@ namespace ProxyTests
 
         public void Intercept(IInvocation invocation)
         {
+            // TODO: consider handle exceptions in other way then.
+            // async/await pattern returns Task with IsFault flag and throws AggregateException only when task starts.
+            // In case of exception in method start error will be occurred immediately.
+            // TODO: consider wrap exceptions in AggregateException in case of async methods
             MethodStart(invocation);
 
             try {
@@ -63,9 +67,11 @@ namespace ProxyTests
                 invocation.ReturnValue = task.ContinueWith(continuation => {
                     if (continuation.IsFaulted && continuation.Exception != null) {
                         ExceptionThrown(invocation, continuation.Exception.InnerException);
-                    } 
-                    MethodEnd(invocation);
-                });
+                    } else {
+                        MethodEnd(invocation);
+                    }
+                    return continuation;
+                }).Unwrap();
             // Process task with value.
             } else if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof (Task<>)) {
                 var task = (Task) invocation.ReturnValue;

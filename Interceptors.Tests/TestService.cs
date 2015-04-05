@@ -31,10 +31,18 @@ namespace Interceptors.Tests
             _eventsCollection.Add("ReturnsVoidAsync call end");
         }
 
-        public async Task ReturnsTaskAsync()
+        public async Task ReturnsTaskAsync(bool throwsExceptionBeforeAwait = false, bool throwsExceptionAfterAwait = false)
         {
             _eventsCollection.Add("ReturnsTaskAsync call start");
+            if (throwsExceptionBeforeAwait) {
+                throw new Exception("ReturnsTaskAsync exception before await");
+            }
+
             await Task.Delay(10);
+
+            if (throwsExceptionAfterAwait) {
+                throw new Exception("ReturnsTaskAsync exception after await");
+            }
             _eventsCollection.Add("ReturnsTaskAsync call end");
         }
 

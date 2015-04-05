@@ -9,7 +9,7 @@ namespace Interceptors.Tests
         void ReturnsVoid(bool throwsException = false);
         void ReturnsVoidAsync();
 
-        Task ReturnsTaskAsync();
+        Task ReturnsTaskAsync(bool throwsExceptionBeforeAwait = false, bool throwsExceptionAfterAwait = false);
 
         int ReturnsValue(bool throwsException = false);
         Task<int> ReturnsValueAsync();

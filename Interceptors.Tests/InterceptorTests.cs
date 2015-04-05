@@ -162,6 +162,82 @@ namespace Interceptors.Tests
             Assert.AreEqual("ReturnsTaskAsync call end", _eventsCollection.ToList()[2]);
             Assert.AreEqual("TestInterceptor call end", _eventsCollection.ToList()[3]);
         }
+
+        [Test]
+        public void TestIntercept_WhenMethodReturnsTaskAndStartThrowsException_ThrowsExceptionAndDoesntCallInterceptedMethod()
+        {
+            _interceptor.ThrowExceptionAtTheStart = true;
+
+            var ex = Assert.Throws<Exception>(() => _proxy.ReturnsTaskAsync().Wait());
+            Assert.AreEqual("TestInterceptor exception at the start", ex.Message);
+
+            Assert.AreEqual(1, _eventsCollection.Count);
+            Assert.AreEqual("TestInterceptor call start", _eventsCollection.ToList()[0]);
+        }
+
+        [Test]
+        public void TestIntercept_WhenMethodReturnsTaskAndEndThrowsException_ThrowsException()
+        {
+            _interceptor.ThrowExceptionAtTheEnd = true;
+            var ex = Assert.Throws<AggregateException>(() => _proxy.ReturnsTaskAsync().Wait());
+            Assert.AreEqual("TestInterceptor exception at the end", ex.InnerException.Message);
+
+            Assert.AreEqual(4, _eventsCollection.Count);
+            Assert.AreEqual("TestInterceptor call start", _eventsCollection.ToList()[0]);
+            Assert.AreEqual("ReturnsTaskAsync call start", _eventsCollection.ToList()[1]);
+            Assert.AreEqual("ReturnsTaskAsync call end", _eventsCollection.ToList()[2]);
+            Assert.AreEqual("TestInterceptor call end", _eventsCollection.ToList()[3]);
+        }
+
+        [Test]
+        public void TestIntercept_WhenMethodReturnsTaskAndThrowsExceptionBeforeAwait_ExceptionThrownAreCalled()
+        {
+            var ex = Assert.Throws<AggregateException>(() => _proxy.ReturnsTaskAsync(true).Wait());
+            Assert.AreEqual("ReturnsTaskAsync exception before await", ex.InnerException.Message);
+
+            Assert.AreEqual(3, _eventsCollection.Count);
+            Assert.AreEqual("TestInterceptor call start", _eventsCollection.ToList()[0]);
+            Assert.AreEqual("ReturnsTaskAsync call start", _eventsCollection.ToList()[1]);
+            Assert.AreEqual("TestInterceptor exception was thrown", _eventsCollection.ToList()[2]);
+        }
+
+        [Test]
+        public void TestIntercept_WhenMethodReturnsTaskAndThrowsExceptionAfterAwait_ExceptionThrownAreCalled()
+        {
+            var ex = Assert.Throws<AggregateException>(() => _proxy.ReturnsTaskAsync(false, true).Wait());
+            Assert.AreEqual("ReturnsTaskAsync exception after await", ex.InnerException.Message);
+
+            Assert.AreEqual(3, _eventsCollection.Count);
+            Assert.AreEqual("TestInterceptor call start", _eventsCollection.ToList()[0]);
+            Assert.AreEqual("ReturnsTaskAsync call start", _eventsCollection.ToList()[1]);
+            Assert.AreEqual("TestInterceptor exception was thrown", _eventsCollection.ToList()[2]);
+        }
+
+        [Test]
+        public void TestIntercept_WhenMethodReturnsTaskAndThrowsExceptionBeforeAwaitAndExceptionThrownMethodThrowsExceptionWrapper_ThrowsWraperException()
+        {
+            _interceptor.ThrowWrapperAtTheExceptionThrown = true;
+            var ex = Assert.Throws<AggregateException>(() => _proxy.ReturnsTaskAsync(true).Wait());
+            Assert.AreEqual("TestInterceptor exception wrapper", ex.InnerException.Message);
+
+            Assert.AreEqual(3, _eventsCollection.Count);
+            Assert.AreEqual("TestInterceptor call start", _eventsCollection.ToList()[0]);
+            Assert.AreEqual("ReturnsTaskAsync call start", _eventsCollection.ToList()[1]);
+            Assert.AreEqual("TestInterceptor exception was thrown", _eventsCollection.ToList()[2]);
+        }
+
+        [Test]
+        public void TestIntercept_WhenMethodReturnsTaskAndThrowsExceptionAfterAwaitAndExceptionThrownMethodThrowsExceptionWrapper_ThrowsWraperException()
+        {
+            _interceptor.ThrowWrapperAtTheExceptionThrown = true;
+            var ex = Assert.Throws<AggregateException>(() => _proxy.ReturnsTaskAsync(false, true).Wait());
+            Assert.AreEqual("TestInterceptor exception wrapper", ex.InnerException.Message);
+
+            Assert.AreEqual(3, _eventsCollection.Count);
+            Assert.AreEqual("TestInterceptor call start", _eventsCollection.ToList()[0]);
+            Assert.AreEqual("ReturnsTaskAsync call start", _eventsCollection.ToList()[1]);
+            Assert.AreEqual("TestInterceptor exception was thrown", _eventsCollection.ToList()[2]);
+        }
         #endregion
 
         #region Test intercepting method that returns value
